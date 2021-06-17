@@ -33,6 +33,35 @@ def constructive(data):
     print(table)
 
 
+def distanceWtest(name, volume, dataMatrix):
+    solutions = []  # all routes are saved here??
+    totaldist = 0  # total distance of route
+    totalVolume = 0  # total volume of route
+    fullcar = False  # if car is full
+
+    i = randint(1, len(name))  # gets random starting point
+    distancesIColumn = np.array(dataMatrix[i])
+    distancesIColumn = np.delete(distancesIColumn,0)
+    distancesIColumn = np.delete(distancesIColumn, i-1) #There is probably a better way to do this but i removed the name and the null value
+    volume = np.delete(volume, i-1)
+
+
+    route = [name[i]]  # adding the name of starting point
+
+    print("Program starts at the ", route, " service\n\n")
+
+    while (fullcar == False):
+        candidateList = []  # candidates for next route entry
+        w = []
+        for j in range(0, len(name)-1):  # Gets the list of candidates with calculations
+            candidateList.append(j)
+
+            w.append(volume[j] + 2*distancesIColumn[j])  # TODO: Learn how the calculation works  DONE
+        print(w, "\n")
+        np.sort(w)  # TODO: order CandidateList by less to more  DONE?
+        print(w, "\n")
+        fullcar = True
+
 
 def distance(name, volume, dataMatrix):
 
@@ -71,8 +100,6 @@ def distance(name, volume, dataMatrix):
 
         else:
             fullcar = true
-            route.append("""armazem central""")  #TODO: What is the main storage
-            totaldist += distancesIColumn[#ID armazem]
             solutions.append(route)
             print(route, totalVolume, totaldist)
             route = []
@@ -82,7 +109,7 @@ def distance(name, volume, dataMatrix):
 
 
 #constructive(dados)
-distance(GServiceName, GVolumeCar, dist_matrix)
+distanceWtest(GServiceName, GVolumeCar, dist_matrix)
 
 """
 import random
