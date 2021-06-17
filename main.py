@@ -24,13 +24,11 @@ def constructive(data):
     #for i in range(1, len(service_id)):
      #   print(service_id[i], service_des[i], volume_cars[i], volume[i])  # prints for testing purposes
 
-    aux = 0  #
-    full_car = False  # verifies if car is full
-    volume_air = 0  #
 
     table = np.column_stack((service_id, service_des, volume_cars))
     print("\n")
     print(table)
+
 
 
 def distanceWtest(name, volume, dataMatrix):
@@ -58,7 +56,7 @@ def distanceWtest(name, volume, dataMatrix):
 
             w.append(volume[j] + 2*distancesIColumn[j])  # TODO: Learn how the calculation works  DONE
         print(w, "\n")
-        np.sort(w)  # TODO: order CandidateList by less to more  DONE?
+        w=np.sort(w)  # TODO: order CandidateList by less to more  DONE?
         print(w, "\n")
         fullcar = True
 
@@ -111,40 +109,3 @@ def distance(name, volume, dataMatrix):
 #constructive(dados)
 distanceWtest(GServiceName, GVolumeCar, dist_matrix)
 
-"""
-import random
-
-
-def funcao():
-    candidatelist = []
-    nservices = 35
-    initialsolution = 0
-    route = []
-    fullcar = False
-
-    i = 0
-    k = 1
-    while len(route) != 35:
-        for k in range(nservices):
-
-            i = random.randint(1, nservices)
-
-            if i not in route:
-                route.append(i)
-                print(i)
-
-            while fullcar == False:
-                j = 1
-                for j in range(nservices):
-                    candidatelist.append(j)
-                    # calculo
-
-                for j in len(route):
-                    candidatelist.remove(j)
-
-
-funcao()
-
-
-
-"""
