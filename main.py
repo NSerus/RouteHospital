@@ -76,6 +76,7 @@ def distance(name, volume, dataMatrix):
         print(aux)
         fullcar = False  # updates empty car
 
+        route = [name[i]]  # adding the name of starting point
         distancesIColumn = np.array(dataMatrix[i])  #updates dataMatrix for new i'
         distancesIColumn = np.delete(distancesIColumn, 0)
         while (fullcar == False):
@@ -84,6 +85,7 @@ def distance(name, volume, dataMatrix):
                 for j in range(0, len(name)-1):  # Gets the list of candidates with calculations
                     candidateList.append(j)
                     w.append(volume[j] + 2*distancesIColumn[j])  #calculation
+                print(len(candidateList))
                 firstTime = False
                 candidateList.remove(i)
                 bubbleSort(candidateList, w)
@@ -106,8 +108,9 @@ def distance(name, volume, dataMatrix):
             else:
                 fullcar = True
                 solutions.append(route)
-                print(route, "\n" , totalVolume, totalDist, "\n")
-                aux+=len(route)
+                print(route, len(route), "\n" , totalVolume, totalDist, "\n")
+
+                aux+=len(route) #good
                 route = []
                 totalVolume=0
                 totalDist=0
