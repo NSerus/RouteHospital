@@ -30,43 +30,6 @@ def constructive(data):
     print(table)
 
 
-
-def distanceWtest(name, volume, dataMatrix):
-    solutions = []  # all routes are saved here??
-    totaldist = 0  # total distance of route
-    totalVolume = 0  # total volume of route
-    fullcar = False  # if car is full
-
-    i = randint(1, len(name))  # gets random starting point
-    distancesIColumn = np.array(dataMatrix[i])
-    distancesIColumn = np.delete(distancesIColumn,0)
-    distancesIColumn = np.delete(distancesIColumn, i-1) #There is probably a better way to do this but i removed the name and the null value
-    volume = np.delete(volume, i-1)
-
-
-    route = [name[i]]  # adding the name of starting point
-
-    print("Program starts at the ", route, " service\n\n")
-
-    while (fullcar == False):
-        candidateList = []  # candidates for next route entry
-        w = []
-        for j in range(0, len(name)-1):  # Gets the list of candidates with calculations
-            candidateList.append(j)
-
-            w.append(volume[j] + 2*distancesIColumn[j])
-        print(w, "\n")
-        bubbleSort(candidateList,w)
-        print(w, "\n")
-
-        for j in range(1, len(route)):   #removes services in route from the list
-           candidateList.splice(j, 1)
-
-        j = candidateList[0]  # selects first of candidateList
-
-        fullcar = True
-
-
 def bubbleSort(id, value):   #bubbleSorter - got it here https://www.geeksforgeeks.org/bubble-sort/
     n = len(id)
 
@@ -97,35 +60,43 @@ def distance(name, volume, dataMatrix):
     totalDist = 0  # total distance of route
     totalVolume = 0  # total volume of route
     aux=0      #service counter
+    candidateList = []  # candidates for next route entry
+    w = []
+    firstTime = True
 
-    i = randint(1, len(name))  # gets random starting point
-    distancesIColumn = np.array(dataMatrix[i])
-    distancesIColumn = np.delete(distancesIColumn, 0)
-    distancesIColumn = np.delete(distancesIColumn, i - 1)  # There is probably a better way to do this but i removed the name and the null value
-    volume = np.delete(volume, i - 1)
+    i = randint(0, len(name)-1)  # gets random starting point
+
+    #distancesIColumn = np.delete(distancesIColumn, i - 1)  # There is probably a better way to do this but i removed the name and the null value
+    #volume = np.delete(volume, i - 1)
 
     route = [name[i]]  # adding the name of starting point
-
     print("Program starts at the ", route, " service\n\n")
 
     while(aux< len(name)):
-        fullcar = False  # if car is full
+        print(aux)
+        fullcar = False  # updates empty car
+
+        distancesIColumn = np.array(dataMatrix[i])  #updates dataMatrix for new i'
+        distancesIColumn = np.delete(distancesIColumn, 0)
         while (fullcar == False):
-            candidateList = []  # candidates for next route entry
-            w = []
 
-            for j in range(0, len(name)-1):  # Gets the list of candidates with calculations
-                candidateList.append(j)
-                w.append(volume[j] + 2*distancesIColumn[j])  #calculation
+            if(firstTime == True):
+                for j in range(0, len(name)-1):  # Gets the list of candidates with calculations
+                    candidateList.append(j)
+                    w.append(volume[j] + 2*distancesIColumn[j])  #calculation
+                firstTime = False
+                candidateList.remove(i)
+                bubbleSort(candidateList, w)
 
-            for j in range(1, len(route)):   #removes services in route from the list
-                candidateList.remove(j)
+            if(candidateList != []):
+                j = candidateList[0]  # selects first of candidateList
+            #for j in range(0, len(route)-1):   #removes services in route from the list
 
-            bubbleSort(candidateList, w)
+            candidateList.remove(candidateList[0])
 
-            j = candidateList[0]  #selects first of candidateList
+            print(candidateList)
 
-            if (totalVolume + volume[j] < 4):  # verifies if volume + new volume doesnt overcumbers the car
+            if (totalVolume + volume[j] < 4 and candidateList !=[]):  # verifies if volume + new volume doesnt overcumbers the car
                 route.append(name[j])  #adds new service to route
                 totalVolume += volume[j]   #adds new volume to total volume of route
                 totalDist += distancesIColumn[j]#adding distance to total distance
