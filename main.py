@@ -67,8 +67,8 @@ def distance(name, volume, dataMatrix):
     route = [i]  # adding the name of starting point
     print("Program starts at the ", route, " service\n\n")
 
-    while(aux< len(name)-3):
-        print(aux)
+    while(aux< len(name)-1):
+
         fullcar = False  # updates empty car
 
         route = [i]  # adding the name of starting point
@@ -80,11 +80,11 @@ def distance(name, volume, dataMatrix):
             distancesIColumn = np.array(dataMatrix[i+1])  # updates dataMatrix for new i'
             distancesIColumn = np.delete(distancesIColumn, 0)
             #distancesIColumn = np.delete(distancesIColumn, i-1)
-            volumeSave = np.delete(volumeSave, i-1)
+            #volumeSave = np.delete(volumeSave, i-1)
 
             candidateList = []  # candidates for next route entry
             w = []
-            for j in range(0, len(name)-1):  # Gets the list of candidates with calculations
+            for j in range(0, len(name)):  # Gets the list of candidates with calculations
                 candidateList.append(j)
                 w.append(volumeSave[j] + 2*distancesIColumn[j])  #calculation
 
@@ -102,12 +102,11 @@ def distance(name, volume, dataMatrix):
                     w.remove(w[route[j]])
 
             bubbleSort(candidateList, w)
-
             if (candidateList != []):
                 j = candidateList[0]  # selects first of candidateList
 
 
-            if (totalVolume + volume[j] < 4 and aux <=32 ):  # verifies if volume + new volume doesnt overcumbers the car
+            if (totalVolume + volume[j] < 4 and aux <=len(name)-2 ):  # verifies if volume + new volume doesnt overcumbers the car
                 route.append(j)  #adds new service to route
                 totalVolume += volume[j]   #adds new volume to total volume of route
                 totalDist += distancesIColumn[j]#adding distance to total distance
@@ -117,13 +116,12 @@ def distance(name, volume, dataMatrix):
             else:
                 fullcar = True
                 solutions.append(route)
-                print(name[route], len(route), "\n" , totalVolume, totalDist, "\n")
+                print(name[route] , totalVolume, totalDist, "\n\n")
 
 
                 route = []
                 totalVolume=0
                 totalDist=0
-    print(aux)
 
 
 
