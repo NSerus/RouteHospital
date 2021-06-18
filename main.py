@@ -57,58 +57,55 @@ def bubbleSort(id, value):   #bubbleSorter - got it here https://www.geeksforgee
 
 def distance(name, volume, dataMatrix):
     solutions = []  # all routes are saved here??
+    solutionsName = []
     totalDist = 0  # total distance of route
     totalVolume = 0  # total volume of route
     aux=0      #service counter
-    firstTime = True
-
     i = randint(0, len(name)-1)  # gets random starting point
 
     route = [i]  # adding the name of starting point
     print("Program starts at the ", route, " service\n\n")
 
     while(aux< len(name)-1):
-
         fullcar = False  # updates empty car
 
         route = [i]  # adding the name of starting point
-
+        routeName = [name[i]]
+        nameRoute = [name[i]]
 
         while (fullcar == False):
             volumeSave = volume
             nameSave = name
             distancesIColumn = np.array(dataMatrix[i+1])  # updates dataMatrix for new i'
             distancesIColumn = np.delete(distancesIColumn, 0)
-            #distancesIColumn = np.delete(distancesIColumn, i-1)
-            #volumeSave = np.delete(volumeSave, i-1)
 
             candidateList = []  # candidates for next route entry
+            candidateListName = []
             w = []
             for j in range(0, len(name)):  # Gets the list of candidates with calculations
                 candidateList.append(j)
                 w.append(volumeSave[j] + 2*distancesIColumn[j])  #calculation
 
+            w.remove(w[i])
+            candidateList.remove(candidateList[i])
+            bubbleSort(candidateList, w)
+
             for j in range(0 , len(solutions)):
                 for k in range(0, len(solutions[j])):
                     if(solutions[j][k] in candidateList):
                         candidateList.remove(solutions[j][k])
-                    if (solutions[j][k] in w):
-                        w.remove(w[solutions[j][k]])
-
             for j in range(0 , len(route)):
                 if(route[j] in candidateList):
-                    candidateList.remove(route[j])
-                if (route[j] in w):
-                    w.remove(w[route[j]])
+                    candidateList.remove(route[j]) #TODO: Make new route Arrays for  w and name
 
-            bubbleSort(candidateList, w)
             if (candidateList != []):
                 j = candidateList[0]  # selects first of candidateList
 
-
             if (totalVolume + volume[j] < 4 and aux <=len(name)-2 ):  # verifies if volume + new volume doesnt overcumbers the car
                 route.append(j)  #adds new service to route
+                nameRoute.append(nameSave[j])
                 totalVolume += volume[j]   #adds new volume to total volume of route
+
                 totalDist += distancesIColumn[j]#adding distance to total distance
 
                 i = j   #j is new i for next service in route
@@ -116,13 +113,15 @@ def distance(name, volume, dataMatrix):
             else:
                 fullcar = True
                 solutions.append(route)
-                print(name[route] , totalVolume, totalDist, "\n\n")
+                solutionsName.append(routeName)
+                print(name[route], "\n", route, "\n", totalVolume, totalDist, "\n\n")
 
 
-                route = []
+                route = [i]
+                nameRoute = []
+
                 totalVolume=0
                 totalDist=0
-
 
 
 
