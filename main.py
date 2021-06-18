@@ -60,60 +60,71 @@ def distance(name, volume, dataMatrix):
     totalDist = 0  # total distance of route
     totalVolume = 0  # total volume of route
     aux=0      #service counter
-    candidateList = []  # candidates for next route entry
-    w = []
     firstTime = True
 
     i = randint(0, len(name)-1)  # gets random starting point
 
-    #distancesIColumn = np.delete(distancesIColumn, i - 1)  # There is probably a better way to do this but i removed the name and the null value
-    #volume = np.delete(volume, i - 1)
-
-    route = [name[i]]  # adding the name of starting point
+    route = [i]  # adding the name of starting point
     print("Program starts at the ", route, " service\n\n")
 
-    while(aux< len(name)):
+    while(aux< len(name)-3):
         print(aux)
         fullcar = False  # updates empty car
 
-        route = [name[i]]  # adding the name of starting point
-        distancesIColumn = np.array(dataMatrix[i])  #updates dataMatrix for new i'
-        distancesIColumn = np.delete(distancesIColumn, 0)
+        route = [i]  # adding the name of starting point
+
+
         while (fullcar == False):
+            volumeSave = volume
+            nameSave = name
+            distancesIColumn = np.array(dataMatrix[i+1])  # updates dataMatrix for new i'
+            distancesIColumn = np.delete(distancesIColumn, 0)
+            #distancesIColumn = np.delete(distancesIColumn, i-1)
+            volumeSave = np.delete(volumeSave, i-1)
+            nameSave = np.delete(nameSave, i - 1)
 
-            if(firstTime == True):
-                for j in range(0, len(name)-1):  # Gets the list of candidates with calculations
-                    candidateList.append(j)
-                    w.append(volume[j] + 2*distancesIColumn[j])  #calculation
-                print(len(candidateList))
-                firstTime = False
-                candidateList.remove(i)
-                bubbleSort(candidateList, w)
+            candidateList = []  # candidates for next route entry
+            w = []
+            for j in range(0, len(name)-1):  # Gets the list of candidates with calculations
+                candidateList.append(j)
+                w.append(volumeSave[j] + 2*distancesIColumn[j])  #calculation
 
-            if(candidateList != []):
+            for j in range(0 , len(solutions)):
+                for k in range(0, len(solutions[j])):
+                    if(solutions[j][k] in candidateList):
+                        candidateList.remove(solutions[j][k])
+                    if (solutions[j][k] in w):
+                        w.remove(w[solutions[j][k]])
+
+            for j in range(0 , len(route)):
+                if(route[j] in candidateList):
+                    candidateList.remove(route[j])
+                if (route[j] in w):
+                    w.remove(w[route[j]])
+
+            bubbleSort(candidateList, w)
+
+            if (candidateList != []):
                 j = candidateList[0]  # selects first of candidateList
-            #for j in range(0, len(route)-1):   #removes services in route from the list
 
-            candidateList.remove(candidateList[0])
 
-            print(candidateList)
-
-            if (totalVolume + volume[j] < 4 and candidateList !=[]):  # verifies if volume + new volume doesnt overcumbers the car
-                route.append(name[j])  #adds new service to route
+            if (totalVolume + volume[j] < 4 and aux <=32 ):  # verifies if volume + new volume doesnt overcumbers the car
+                route.append(j)  #adds new service to route
                 totalVolume += volume[j]   #adds new volume to total volume of route
                 totalDist += distancesIColumn[j]#adding distance to total distance
 
                 i = j   #j is new i for next service in route
-
+                aux+=1
             else:
                 fullcar = True
                 solutions.append(route)
-                print(route, len(route), "\n" , totalVolume, totalDist, "\n")
+                print(nameSave[route], len(route), "\n" , totalVolume, totalDist, "\n")
 
-                aux+=len(route) #good
+
                 route = []
                 totalVolume=0
                 totalDist=0
+    print(aux)
 
 
 
