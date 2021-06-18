@@ -81,7 +81,6 @@ def distance(name, volume, dataMatrix):
             distancesIColumn = np.delete(distancesIColumn, 0)
             #distancesIColumn = np.delete(distancesIColumn, i-1)
             volumeSave = np.delete(volumeSave, i-1)
-            nameSave = np.delete(nameSave, i - 1)
 
             candidateList = []  # candidates for next route entry
             w = []
@@ -118,7 +117,7 @@ def distance(name, volume, dataMatrix):
             else:
                 fullcar = True
                 solutions.append(route)
-                print(nameSave[route], len(route), "\n" , totalVolume, totalDist, "\n")
+                print(name[route], len(route), "\n" , totalVolume, totalDist, "\n")
 
 
                 route = []
