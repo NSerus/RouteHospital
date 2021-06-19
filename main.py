@@ -76,6 +76,7 @@ def distance(name, volume, dataMatrix):
 
         fullcar = False  # updates empty car
         route = [i]  # adding the name of starting point
+        totalVolume = volume[i]
 
         while (fullcar == False):
 
