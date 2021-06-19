@@ -170,7 +170,8 @@ def distance(name, volume, dataMatrix):
                 # -----------------------------#
                 #     RESET'S ROUTE & DATA     #
                 # -----------------------------#
-                i = candidateList[randint(0, len(candidateList))-1]
+                if(candidateList != []):
+                    i = candidateList[randint(0, len(candidateList))-1]
 
                 route = []  #empty's stuff
                 totalVolume=0
