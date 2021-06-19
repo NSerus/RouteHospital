@@ -137,7 +137,7 @@ def distance(name, volume, dataMatrix):
             # IF DOESNT GET  OVERCUMBURED  #
             #       AND HAS SERVICES       #
             # -----------------------------#
-            if (totalVolume + volume[j] < 4 and aux <=len(name)-2 ):  # verifies if volume + new volume doesnt overcumbers the car
+            if (totalVolume + volume[j] < 4 and aux <=len(name)-1):  # verifies if volume + new volume doesnt overcumbers the car
 
                 # -------------------------------#
                 #    ADDS CANDIDATE TO ROUTE     #
@@ -168,12 +168,14 @@ def distance(name, volume, dataMatrix):
 
                 print("\n", name[route], "\n", totalVolume, totalDist) #prints stuff
 
+
                 # -----------------------------#
                 #     RESET'S ROUTE & DATA     #
                 # -----------------------------#
                 if(candidateList != []):
                     i = candidateList[randint(0, len(candidateList))-1]
 
+                aux += 1
                 route = []  #empty's stuff
                 totalVolume=0
                 totalDist=0
