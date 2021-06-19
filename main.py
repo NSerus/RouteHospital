@@ -56,70 +56,118 @@ def bubbleSort(id, value):   #bubbleSorter - got it here https://www.geeksforgee
             break
 
 def distance(name, volume, dataMatrix):
-    solutions = []  # all routes are saved here??
-    solutionsName = []
+
+    #------------------------------#
+    #       GLOBAL VARIABLES       #
+    #------------------------------#
+
+    solutions = []  # Where routes are saved
     totalDist = 0  # total distance of route
     totalVolume = 0  # total volume of route
     aux=0      #service counter
+
     i = randint(0, len(name)-1)  # gets random starting point
 
-    route = [i]  # adding the name of starting point
-    print("Program starts at the ", route, " service\n\n")
-
     while(aux< len(name)-1):
-        fullcar = False  # updates empty car
 
+        # ---------------------------------#
+        #UPDATING VARIABLES (FOR NEW ROUTE)#
+        # ---------------------------------#
+
+        fullcar = False  # updates empty car
         route = [i]  # adding the name of starting point
-        routeName = [name[i]]
-        nameRoute = [name[i]]
 
         while (fullcar == False):
+
+            # --------------------------------------#
+            # UPDATING VARIABLES (FOR NEW CANDIDATE)#
+            # --------------------------------------#
+
             volumeSave = volume
-            nameSave = name
             distancesIColumn = np.array(dataMatrix[i+1])  # updates dataMatrix for new i'
             distancesIColumn = np.delete(distancesIColumn, 0)
 
             candidateList = []  # candidates for next route entry
-            candidateListName = []
-            w = []
+            value = []
+
+            # ------------------------------#
+            #   CANDIDATE LIST CREATION     #
+            # ------------------------------#
+
             for j in range(0, len(name)):  # Gets the list of candidates with calculations
-                candidateList.append(j)
-                w.append(volumeSave[j] + 2*distancesIColumn[j])  #calculation
+                candidateList.append(j)   #adds id of candidates
+                value.append(volumeSave[j] + 2*distancesIColumn[j])  #calculation
 
-            w.remove(w[i])
-            candidateList.remove(candidateList[i])
-            bubbleSort(candidateList, w)
+            # ------------------------------#
+            #    REMOVING FIRST CANDIDATE   #
+            #         & SORTING LIST        #
+            # ------------------------------#
 
-            for j in range(0 , len(solutions)):
+            value.remove(value[i])   #removes value from starting service
+            candidateList.remove(candidateList[i])  #removes id from starting service
+
+            bubbleSort(candidateList, value)  #sorting the candidates by value
+
+            # -----------------------------#
+            # REMOVES USED CANDIDATES FROM #
+            # EARLY ROUTES & PRESENT ROUTE #
+            # -----------------------------#
+
+            for j in range(0 , len(solutions)): #removes used candidates in early solutions
                 for k in range(0, len(solutions[j])):
                     if(solutions[j][k] in candidateList):
                         candidateList.remove(solutions[j][k])
-            for j in range(0 , len(route)):
+
+            for j in range(0 , len(route)):  #removes already used candidates on routes
                 if(route[j] in candidateList):
-                    candidateList.remove(route[j]) #TODO: Make new route Arrays for  w and name
+                    candidateList.remove(route[j])
+
+            # -----------------------------#
+            #   SELECTS CANDIDATE TO ADD   #
+            # -----------------------------#
 
             if (candidateList != []):
                 j = candidateList[0]  # selects first of candidateList
 
+            # -----------------------------#
+            # IF DOESNT GET  OVERCUMBURED  #
+            #       AND HAS SERVICES       #
+            # -----------------------------#
             if (totalVolume + volume[j] < 4 and aux <=len(name)-2 ):  # verifies if volume + new volume doesnt overcumbers the car
-                route.append(j)  #adds new service to route
-                nameRoute.append(nameSave[j])
-                totalVolume += volume[j]   #adds new volume to total volume of route
 
+                # -------------------------------#
+                #    ADDS CANDIDATE TO ROUTE     #
+                #        & UPDATES DATA          #
+                # -------------------------------#
+                route.append(j)  #adds new service to route
+                totalVolume += volume[j]   #adds new volume to total volume of route
                 totalDist += distancesIColumn[j]#adding distance to total distance
 
+                # ---------------------------------#
+                # & MAKES CANDIDATE LAST CANDIDATE #
+                # ---------------------------------#
                 i = j   #j is new i for next service in route
-                aux+=1
+
+                aux+=1 #counts new added service
             else:
-                fullcar = True
-                solutions.append(route)
-                solutionsName.append(routeName)
-                print(name[route], "\n", route, "\n", totalVolume, totalDist, "\n\n")
 
+                # -----------------------------#
+                #         CAR IS FULL          #
+                # -----------------------------#
 
-                route = [i]
-                nameRoute = []
+                fullcar = True  #car is full
 
+                # -----------------------------#
+                #    ADDS SOLUTIONS & PRINTS   #
+                # -----------------------------#
+                solutions.append(route)  #adds new solution
+
+                print("\n", name[route], "\n", totalVolume, totalDist, "\n\n") #prints stuff
+
+                # -----------------------------#
+                #     RESET'S ROUTE & DATA     #
+                # -----------------------------#
+                route = []  #empty's stuff
                 totalVolume=0
                 totalDist=0
 
