@@ -86,6 +86,8 @@ def distance(name, volume, dataMatrix):
             volumeSave = volume
             distancesIColumn = np.array(dataMatrix[i+1])  # updates dataMatrix for new i'
             distancesIColumn = np.delete(distancesIColumn, 0)
+            MaxVolume = max(volumeSave)
+            MaxDistance = max(distancesIColumn)
 
             candidateList = []  # candidates for next route entry
             value = []
@@ -96,7 +98,8 @@ def distance(name, volume, dataMatrix):
 
             for j in range(0, len(name)):  # Gets the list of candidates with calculations
                 candidateList.append(j)   #adds id of candidates
-                value.append(volumeSave[j] + 2*distancesIColumn[j])  #calculation
+                value.append((volumeSave[j]/MaxVolume) + 2*(distancesIColumn[j]/MaxDistance))  #calculation
+                #new calc ?? "(volume/max(volume) + 2*(distancesIColumn[j]/distancesIColumn(max)))"
 
             # ------------------------------#
             #    REMOVING FIRST CANDIDATE   #
@@ -143,7 +146,7 @@ def distance(name, volume, dataMatrix):
                 totalVolume += volume[j]   #adds new volume to total volume of route
                 totalDist += distancesIColumn[j]#adding distance to total distance
 
-                # ---------------------------------#
+                # --------------------------------py-#
                 # & MAKES CANDIDATE LAST CANDIDATE #
                 # ---------------------------------#
                 i = j   #j is new i for next service in route
@@ -162,11 +165,13 @@ def distance(name, volume, dataMatrix):
                 # -----------------------------#
                 solutions.append(route)  #adds new solution
 
-                print("\n", name[route], "\n", totalVolume, totalDist, "\n\n") #prints stuff
+                print("\n", name[route], "\n", totalVolume, totalDist) #prints stuff
 
                 # -----------------------------#
                 #     RESET'S ROUTE & DATA     #
                 # -----------------------------#
+                i = candidateList[randint(0, len(candidateList))-1]
+
                 route = []  #empty's stuff
                 totalVolume=0
                 totalDist=0
