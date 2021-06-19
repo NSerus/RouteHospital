@@ -180,7 +180,7 @@ def distance(name, volume, dataMatrix):
                 totalVolume=0
                 totalDist=0
 
-
+0
 
 
 #constructive(dados)
